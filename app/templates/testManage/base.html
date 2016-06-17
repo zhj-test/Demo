@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}测试管理平台首页{% endblock %}
+
+{% block row_menu %}
+<ul class="nav nav-pills nav-stacked well">
+    <li id="index-menu"><a href="{{ url_for('testManage.index') }}">首页</a></li>
+    <li id="project-menu"><a href="{{ url_for('testManage.projectList') }}">测试项目</a></li>
+    <li id="suite-menu"><a href="{{ url_for('testManage.suiteList') }}">测试集</a></li>
+</ul>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+try{
+    var div = document.getElementById('{% block menu %}{% endblock %}');
+    div.setAttribute("class", "active");
+}catch(err){
+}
+</script>
+{% endblock %}

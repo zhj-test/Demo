@@ -1,0 +1,79 @@
+{% extends "testManage/baseProject.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}用例信息{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="breadcrumb">
+            <li><a href="{{ url_for('testManage.projectList') }}">所有项目</a></li>
+            <li><a href="{{ url_for('testManage.projectInfo', projectId=testCase.module.projectId) }}">{{ testCase.module.project.projectName }}</a></li>
+            <li><a href="{{ url_for('testManage.moduleInfo', moduleId=testCase.moduleId) }}">{{ testCase.module.moduleName }}</a></li>
+            <li class="active">{{ testCase.caseName }}</li>
+        </div>
+    </div>
+    <div class="col-xs-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">用例基本信息</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover" style="table-layout:fixed;">
+                    <tbody>
+                        <tr>
+                            <td width="25%">用例ID</td>
+                            <td>{{ testCase.id }}</td>
+                        </tr>
+                        <tr>
+                            <td>用例名称</td>
+                            <td>{{ testCase.caseName }}</td>
+                        </tr>
+                        <tr>
+                            <td>方法名称</td>
+                            <td>{{ testCase.funcName }}</td>
+                        </tr>
+                        <tr>
+                            <td>参数</td>
+                            <td>{{ testCase.params }}</td>
+                        </tr>
+                        <tr>
+                            <td>备注</td>
+                            <td style="word-wrap:break-word;">{{ testCase.remark }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">用例操作</h3>
+            </div>
+            <div class="panel=body">
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="{{ url_for('testManage.addData', testCaseId=testCase.id) }}">添加测试数据</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('testManage.modifyTestCase', testCaseId=testCase.id) }}">修改用例信息</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('testManage.deleteTestCase', testCaseId=testCase.id) }}" onclick="return confirm('确定要删除用例及用例下包含的数据吗？')">删除用例</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">用例数据</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    {% for data in testCase.datas %}
+                    <li><a href="{{ url_for('testManage.dataInfo', dataId=data.id) }}" style="color:DarkViolet">{{ data.dataName }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

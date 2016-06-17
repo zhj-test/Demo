@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}1元购测试工具{% endblock %}
+
+{% block row_menu %}
+<ul class="nav nav-pills nav-stacked well">
+    <li id="index-menu"><a href="{{ url_for('duobaoTools.index') }}">首页</a></li>
+    <li id="addOrder-menu"><a href="{{ url_for('duobaoTools.addOrder') }}">下单工具</a></li>
+    <li id="other-menu"><a href="{{ url_for('duobaoTools.index') }}">其它</a></li>
+</ul>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+try{
+    var div = document.getElementById('{% block menu %}{% endblock %}');
+    div.setAttribute("class", "active");
+}catch(err){
+}
+</script>
+{% endblock %}

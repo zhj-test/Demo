@@ -1,0 +1,125 @@
+{% extends "testManage/baseSuite.html" %}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.panel-body li{ list-style-type:square }
+</style>
+{% endblock %}
+
+{% block title %}测试集信息{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="breadcrumb">
+            <li><a href="{{ url_for('testManage.suiteList') }}">所有测试集</a></li>
+            <li class="active">{{ suite.suiteName }}</li>
+        </div>
+    </div>
+    <div class="col-xs-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">测试集基本信息</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover" style="table-layout:fixed;">
+                    <tbody>
+                        <tr>
+                            <td width="25%">测试集ID</td>
+                            <td>{{ suite.id }}</td>
+                        </tr>
+                        <tr>
+                            <td>测试集名称</td>
+                            <td>{{ suite.suiteName }}</td>
+                        </tr>
+                        <tr>
+                            <td>备注</td>
+                            <td style="word-wrap:break-word;">{{ suite.remark }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">测试集操作</h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item"><a onclick="executeTest()">执行测试集</a><div id="result"></div></li>
+                    <li class="list-group-item"><a href="{{ url_for('testManage.modifySuite', suiteId=suite.id) }}">修改测试集</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('testManage.deleteSuite', suiteId=suite.id) }}" onclick="return confirm('确定要删除测试集及测试集下包含的测试报告吗？')">删除测试集</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">测试集结构(绿色为测试集包含用例，灰色为未包含用例)</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    {% for project in projects %}
+                    <li><a href="{{ url_for('testManage.projectInfo', projectId=project.id) }}" {% if 'project_%s'%project.id in checkList %}style="color:green"{% else %}style="color:gray"{% endif %}>{{ project.projectName }}</a></li>
+                    <ul>
+                        {% for module in project.modules %}
+                        <li><a href="{{ url_for('testManage.moduleInfo', moduleId=module.id) }}" {% if 'module_%s'%module.id in checkList %}style="color:green"{% else %}style="color:gray"{% endif %}>{{ module.moduleName }}</a></li>
+                        <ul>
+                            {% for testCase in module.testCases %}
+                            <li><a href="{{ url_for('testManage.testCaseInfo', testCaseId=testCase.id) }}" {% if 'testCase_%s'%testCase.id in checkList %}style="color:green"{% else %}style="color:gray"{% endif %}>{{ testCase.caseName }}</a></li>
+                            <ul>
+                                {% for data in testCase.datas %}
+                                <li><a href="{{ url_for('testManage.dataInfo', dataId=data.id) }}" {% if 'data_%s'%data.id in checkList %}style="color:green"{% else %}style="color:gray"{% endif %}>{{ data.dataName }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            {% endfor %}
+                        </ul>
+                        {% endfor %}
+                    </ul>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">测试报告</h3>
+            </div>
+            <div class="panel=body">
+                <ul class="list-group">
+                    {% for testReport in suite.testReports %}
+                    <li class="list-group-item"><a target="_blank" href="{{ url_for('testManage.getTestReport', testReportId=testReport.id) }}">{{ testReport.reportFile }}</a> | <a href={{ url_for('testManage.deleteTestReport', testReportId=testReport.id) }}>删除</a></li>
+                    {% endfor %}
+                    {% if not suite.testReports %}
+                    <li class="list-group-item">暂时没有测试报告</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+function executeTest(){
+    document.getElementById('result').innerHTML="测试集执行中...";
+    var xmlhttp;
+    xmlhttp=new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function(){
+        if (xmlhttp.readyState==4 && xmlhttp.status==200){
+            document.getElementById("result").innerHTML="执行完毕";
+            window.location.reload(true);
+        }
+    }
+    xmlhttp.open("GET", "{{ url_for('testManage.executeSuite', suiteId=suite.id)}}", true);
+    xmlhttp.send();
+}
+</script>
+{% endblock %}

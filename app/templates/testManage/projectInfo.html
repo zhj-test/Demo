@@ -1,0 +1,83 @@
+{% extends "testManage/baseProject.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}项目信息{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="breadcrumb">
+            <li><a href="{{ url_for('testManage.projectList') }}">所有项目</a></li>
+            <li class="active">{{ project.projectName }}</li>
+        </div>
+    </div>
+    <div class="col-xs-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">项目基本信息</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover" style="table-layout:fixed;">
+                    <tbody>
+                        <tr>
+                            <td width="25%">项目ID</td>
+                            <td>{{ project.id }}</td>
+                        </tr>
+                        <tr>
+                            <td>项目名称</td>
+                            <td>{{ project.projectName }}</td>
+                        </tr>
+                        <tr>
+                            <td>项目目录</td>
+                            <td>{{ project.folderName }}</td>
+                        </tr>
+                        <tr>
+                            <td>备注</td>
+                            <td style="word-wrap:break-word;">{{ project.remark }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">项目操作</h3>
+            </div>
+            <div class="panel=body">
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="{{ url_for('testManage.addModule', projectId=project.id) }}">添加模块</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('testManage.modifyProject', projectId=project.id) }}">修改项目信息</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('testManage.deleteProject', projectId=project.id) }}" onclick="return confirm('确定要删除项目及项目下包含的模块/用例/数据吗？')">删除测试项目</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">项目结构</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    {% for module in project.modules %}
+                    <li><a href="{{ url_for('testManage.moduleInfo', moduleId=module.id) }}" style="color:green">{{ module.moduleName }}</a></li>
+                    <ul>
+                        {% for testCase in module.testCases %}
+                        <li><a href="{{ url_for('testManage.testCaseInfo', testCaseId=testCase.id) }}" style="color:DodgerBlue">{{ testCase.caseName }}</a></li>
+                        <ul>
+                            {% for data in testCase.datas %}
+                            <li><a href="{{ url_for('testManage.dataInfo', dataId=data.id) }}" style="color:DarkViolet">{{ data.dataName }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        {% endfor %}
+                    </ul>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

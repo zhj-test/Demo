@@ -1,0 +1,1 @@
+./venv/bin/gunicorn --config gunicorn.conf -k gevent manage:app --reload

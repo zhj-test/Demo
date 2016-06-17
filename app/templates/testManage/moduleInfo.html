@@ -1,0 +1,84 @@
+{% extends "testManage/baseProject.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}模块信息{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="breadcrumb">
+            <li><a href="{{ url_for('testManage.projectList') }}">所有项目</a></li>
+            <li><a href="{{ url_for('testManage.projectInfo', projectId=module.projectId) }}">{{ module.project.projectName }}</a></li>
+            <li class="active">{{ module.moduleName }}</li>
+        </div>
+    </div>
+    <div class="col-xs-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">模块基本信息</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover" style="table-layout:fixed;">
+                    <tbody>
+                        <tr>
+                            <td width="25%">模块ID</td>
+                            <td>{{ module.id }}</td>
+                        </tr>
+                        <tr>
+                            <td>模块名称</td>
+                            <td>{{ module.moduleName }}</td>
+                        </tr>
+                        <tr>
+                            <td>文件名称</td>
+                            <td>{{ module.fileName }}</td>
+                        </tr>
+                        <tr>
+                            <td>类名称</td>
+                            <td>{{ module.className }}</td>
+                        </tr>
+                        <tr>
+                            <td>备注</td>
+                            <td style="word-wrap:break-word;">{{ module.remark }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">模块操作</h3>
+            </div>
+            <div class="panel=body">
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="{{ url_for('testManage.addTestCase', moduleId=module.id) }}">添加用例</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('testManage.modifyModule', moduleId=module.id) }}">修改模块信息</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('testManage.deleteModule', moduleId=module.id) }}" onclick="return confirm('确定要删除模块及模块下包含的用例/数据吗？')">删除模块</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">模块结构</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    {% for testCase in module.testCases %}
+                    <li><a href="{{ url_for('testManage.testCaseInfo', testCaseId=testCase.id) }}" style="color:DodgerBlue">{{ testCase.caseName }}</a></li>
+                    <ul>
+                        {% for data in testCase.datas %}
+                        <li><a href="{{ url_for('testManage.dataInfo', dataId=data.id) }}" style="color:DarkViolet">{{ data.dataName }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

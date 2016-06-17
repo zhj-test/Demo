@@ -1,0 +1,11 @@
+{% extends "testManage/baseProject.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}添加项目{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

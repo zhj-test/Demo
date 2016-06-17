@@ -1,0 +1,71 @@
+{% extends "testManage/baseSuite.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.checks{ padding-left:20px }
+</style>
+{% endblock %}
+
+{% block title %}增加测试集{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">增加测试集</h3>
+            </div>
+            <div class="panel-body">
+                <form method="POST">
+                    <div class="form-group  required">
+                        {{ form.suiteName.label(class='control-label') }}
+                        {{ form.suiteName(class='form-control',required='')}}
+                    </div>
+                    <div class="form-group">
+                        {{ form.remark.label(class='control-label') }}
+                        {{ form.remark(class='form-control')}}
+                    </div>
+                    <div class="J_CheckWrap">
+                        {% for project in projects %}
+                        <p><input type="checkbox" name="project_{{ project.id }}" />
+                        <a href="{{ url_for('testManage.projectInfo', projectId=project.id) }}">{{ project.projectName }}</a>
+                        </p>
+                        <div class="checks">
+                            {% for module in project.modules %}
+                            <p><input type="checkbox" name="module_{{ module.id }}" />
+                            <a href="{{ url_for('testManage.moduleInfo', moduleId=module.id) }}">{{ module.moduleName }}</a>
+                            </p>
+                            <div class="checks">
+                                {% for testCase in module.testCases %}
+                                <p><input type="checkbox" name="testCase_{{ testCase.id }}" />
+                                <a href="{{ url_for('testManage.testCaseInfo', testCaseId=testCase.id) }}">{{ testCase.caseName }}</a>
+                                </p>
+                                <div class="checks">
+                                    {% for data in testCase.datas %}
+                                    <p><input type="checkbox" name="data_{{ data.id }}" />
+                                    <a href="{{ url_for('testManage.dataInfo', dataId=data.id) }}">{{ data.dataName }}</a>
+                                    </p>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <input id="submit" class="btn btn-default" type="submit" value="提交" name="submit" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-1.6.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jquery.checktree.js') }}"></script>
+<script>$(".J_CheckWrap").checktree();</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+#coding:utf-8
+
+class TestDemo:
+    def aaa(self):
+        assert True
+    def bbb(self):
+        assert False
+    def ccc(self, a, b):
+        print(a+b)
+        assert True

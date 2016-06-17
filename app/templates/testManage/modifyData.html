@@ -1,0 +1,20 @@
+{% extends "testManage/baseProject.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}修改测试数据信息{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">修改测试数据信息，数据ID：{{ dataId }}</h3>
+            </div>
+            <div class="panel-body">
+                {{ wtf.quick_form(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
